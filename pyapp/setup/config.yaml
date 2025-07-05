@@ -1,0 +1,34 @@
+
+mysqldb:
+  host: MYSQL_HOST
+  port: MYSQL_PORT
+  name: MYSQL_DATABASE
+  user: MYSQL_USER
+  passwd: MYSQL_PASSWORD
+  use_threadlocal: 0
+  max_connections: 2
+  stale_timeout: 1000
+  timeout: 0
+  use_unicode: 1
+  charset: "utf8"
+  use_ssl: false
+  verify_ssl: false
+  cert_path: "n/a"
+
+sqlitedb:
+  name: "sqlite3_{UNIXTIME}.db"
+  path: "/var/log/mysql-docker/pyapp"
+  journal_mode: wal
+  cache_size: 64000
+  foreign_keys: 1
+  ignore_check_constraints: 0
+  synchronous: 0
+  timeout: 3
+
+crawl_settings:
+  timeout: 60
+
+log: 
+  level: INFO
+  root: "/var/log/mysql-docker/pyapp"
+  name: "pyapp.log"

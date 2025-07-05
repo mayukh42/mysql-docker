@@ -1,0 +1,41 @@
+# version: '3.3'
+
+services:
+  db2:
+    build:
+      context: .
+      dockerfile: MySQL_Dockerfile
+      args:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    container_name: mysqldb
+    ports:
+      - ${MYSQL_PORT}:3306
+    # volumes:
+    #   - mysql-data:/var/lib/mysql
+  
+  pyapp:
+    # env_file: ./setup/.env
+    image: mysql-docker/pyapp
+    build:
+      context: .
+      dockerfile: Python_Dockerfile
+      args:
+        - MYSQL_HOST=${MYSQL_HOST}
+        - MYSQL_PORT=${MYSQL_PORT:-3306}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    container_name: pyapp
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - ${MYSQL_CLIENT_PORT}:8080
+
+# volumes: 
+#   mysql-data:
+#     driver: local

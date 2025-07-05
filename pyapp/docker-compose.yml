@@ -1,0 +1,16 @@
+# version: '3.3'
+
+services:
+  pyapp:
+    # env_file: ./setup/.env
+    image: mysql-docker/pyapp
+    build:
+      context: .
+      dockerfile: Python_Dockerfile
+      args:
+        - MYSQL_HOST=${MYSQL_HOST}
+        - MYSQL_PORT=${MYSQL_PORT:-3306}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    container_name: pyapp

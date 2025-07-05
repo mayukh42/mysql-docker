@@ -1,3 +1,7 @@
+pyapp/config/config.yaml
+out/
+.env
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

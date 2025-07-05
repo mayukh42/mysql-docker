@@ -1,0 +1,44 @@
+FROM python:latest
+
+# workdir will create this directory if not exists
+WORKDIR /opt/pyapp
+
+ARG MYSQL_HOST
+ARG MYSQL_PORT
+ARG MYSQL_DATABASE
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+
+# required for sed transformations
+ENV MYSQL_HOST=$MYSQL_HOST
+ENV MYSQL_PORT=$MYSQL_PORT
+ENV MYSQL_DATABASE=$MYSQL_DATABASE
+ENV MYSQL_USER=$MYSQL_USER
+ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
+
+# sys packages - install at least a text editor for runtime edits
+RUN apt update
+RUN apt install nano vim
+
+# copy over py files
+RUN mkdir ./src ./config ./setup
+COPY ./setup/requirements.txt ./setup/
+COPY ./setup/config.yaml ./config
+COPY ./src/*.py ./src/
+
+# log root
+RUN mkdir -p /var/log/mysql-docker/pyapp
+
+# create config file
+RUN sed -i "s/MYSQL_HOST/$MYSQL_HOST/g" ./config/config.yaml
+RUN sed -i "s/MYSQL_PORT/$MYSQL_PORT/g" ./config/config.yaml
+RUN sed -i "s/MYSQL_USER/$MYSQL_USER/g" ./config/config.yaml
+RUN sed -i "s/MYSQL_PASSWORD/$MYSQL_PASSWORD/g" ./config/config.yaml
+RUN sed -i "s/MYSQL_DATABASE/$MYSQL_DATABASE/g" ./config/config.yaml
+
+RUN pip install --no-cache-dir -r ./setup/requirements.txt
+
+# COPY . .
+
+# CMD will run and exit, else we can open a shell and execute
+# CMD [ "python", "./src/crawler.py", "config=./config/config.yaml" ]
